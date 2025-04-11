@@ -19,3 +19,5 @@ class AuthTokenService {
 		Cookies.remove(AuthToken.ACCESS_TOKEN)
 	}
 }
+
+export default new AuthTokenService()
