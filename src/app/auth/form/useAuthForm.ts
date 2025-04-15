@@ -6,10 +6,10 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useRef, useTransition } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-export const useAuthForm = () => {
+export const useAuthForm = (isLogin: boolean) => {
 	const { register, handleSubmit, reset } = useForm<IFormData>()
 
 	const router = useRouter()
@@ -45,4 +45,25 @@ export const useAuthForm = () => {
 			if (axios.isAxiosError(error)) toast.error(error.response?.data?.message)
 		},
 	})
+
+	const onSubmit: SubmitHandler<IFormData> = data => {
+		const token = recaptchaRef.current?.getValue()
+
+		if (!token) {
+			toast.error('Please complete the captcha')
+			return
+		}
+
+		isLogin ? mutateLogin(data) : mutateRegister(data)
+	}
+
+	const isLoading = isPending || isLoginPending || isRegisterPending
+
+	return {
+		register,
+		handleSubmit,
+		onSubmit,
+		recaptchaRef,
+		isLoading,
+	}
 }
