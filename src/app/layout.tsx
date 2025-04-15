@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 import './globals.css'
+import { Providers } from './Provider'
 
 const JetBrainsFont = JetBrains_Mono({
 	subsets: ['cyrillic', 'latin'],
@@ -20,9 +21,11 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body className={JetBrainsFont.className}>
-				<main className='flex min-h-screen flex-col items-center justify-between p-8'>
-					{children}
-				</main>
+				<Providers>
+					<main className='flex min-h-screen flex-col items-center justify-between p-8'>
+						{children}
+					</main>
+				</Providers>
 			</body>
 		</html>
 	)
